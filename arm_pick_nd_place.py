@@ -34,7 +34,7 @@ class RobotSimulation:
         plt.ion()  # Turn on interactive mode
         
         # Create figure and store references to prevent garbage collection
-        self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(5, 15))
+        self.fig, (self.ax1, self.ax2) = plt.subplots(1, 2, figsize=(10, 5))
         
         # Try to keep the plot window in the background
         plt.pause(0.1)
