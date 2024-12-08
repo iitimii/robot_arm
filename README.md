@@ -67,7 +67,7 @@ To run the simulation, ensure the following dependencies are installed:
 ### Next Steps
 - Develop and integrate our custom arm model.
 - Integrate camera for object detection.
-- Implement Gymnasium and StableBaselines for reinforcement learning.
+- Integrate Gymnasium and Stable Baselines3 for reinforcement learning.
 - Use reinforcement learning for dynamic task adaptation.
 - Build a physical version of the robot.
 - Implement a Vision Language Action model for improved task understanding and interaction.
