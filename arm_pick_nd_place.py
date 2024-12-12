@@ -143,6 +143,18 @@ class RobotSimulation:
             p.disconnect()
 
 # Run the simulation
+def my_func():
+    print("Hello")
+    my_func2(5)
+
+def my_func2(girl):
+    boy = []
+    boy.append(2)
+    boy.append(girl)
+    print("hello 2")
+
 if __name__ == "__main__":
+    joy = 4
+    my_func()
     sim = RobotSimulation()
     sim.run()
