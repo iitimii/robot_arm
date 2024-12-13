@@ -18,6 +18,7 @@ table_id = p.loadURDF("table/table.urdf", table_position, table_orientation)
 
 try:
     while True:
-        time.sleep(1.0) 
+        p.stepSimulation()
+        time.sleep(1./240.) 
 except KeyboardInterrupt:
     p.disconnect()  
