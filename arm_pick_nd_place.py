@@ -26,6 +26,14 @@ class RobotSimulation:
         self.joint_angles = []
         self.end_effector_positions = []
         
+        # Camera parameters
+        self.camera_width = 640
+        self.camera_height = 480
+        self.camera_fov = 60  # Field of View
+        self.camera_aspect = self.camera_width / self.camera_height
+        self.camera_near = 0.01
+        self.camera_far = 5.0
+        
     def setup_visualization(self):
         # Suppress matplotlib interactive warning
         plt.rcParams.update({'figure.max_open_warning': 0})
@@ -133,13 +141,73 @@ class RobotSimulation:
         # Update the figure without blocking
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
+        
+    #
+    def get_camera_view_matrix(self):
+        # Get the end-effector link state (last link)
+        link_state = p.getLinkState(self.robotId, p.getNumJoints(self.robotId) - 1)
+        cam_position = link_state[0]  # Position of the link (last link)
+        cam_orientation = link_state[1]  # Orientation of the link (quaternion)
+
+        # Convert orientation to rotation matrix
+        cam_rotation = p.getMatrixFromQuaternion(cam_orientation)
+        
+        # Define the camera target as a point in front of the end effector
+        # For example, place the target 0.1 meters in front of the camera along the camera's forward direction
+        cam_target = [
+            cam_position[0] + cam_rotation[0] * 0.1,
+            cam_position[1] + cam_rotation[3] * 0.1,
+            cam_position[2] + cam_rotation[6] * 0.1
+        ]
+        
+        # Define the "up" vector for the camera (aligned with the link's "up" vector)
+        cam_up = [cam_rotation[2], cam_rotation[5], cam_rotation[8]]
+
+        # Compute the view matrix
+        view_matrix = p.computeViewMatrix(cam_position, cam_target, cam_up)
+        return view_matrix
+
+
+    def get_camera_image(self):
+        # Compute the view and projection matrices
+        view_matrix = self.get_camera_view_matrix()
+        proj_matrix = p.computeProjectionMatrixFOV(
+            self.camera_fov, self.camera_aspect, self.camera_near, self.camera_far
+        )
+
+        # Capture the camera image
+        width, height, rgbImg, depthImg, segImg = p.getCameraImage(
+            self.camera_width, self.camera_height, view_matrix, proj_matrix
+        )
+
+        # Reshape the RGB image and normalize to 0-1
+        rgb_array = np.reshape(rgbImg, (height, width, 4)) / 255.0
+        return rgb_array
     
     def run(self):
         try:
-            self.pick_and_place_cube()
-            plt.ioff()  # Turn off interactive mode
-            plt.show()  # Keep the final plot open
+            # self.pick_and_place_cube()
+            # plt.ioff()  # Turn off interactive mode
+            # plt.show()  # Keep the final plot open
+            
+            plt.ion()  # Enable interactive mode for Matplotlib
+            fig, ax = plt.subplots(figsize=(8, 6))
+            
+            for _ in range(1000):
+                p.stepSimulation()
+                time.sleep(1.0 / 240.0)
+
+                # Capture and display camera view
+                camera_image = self.get_camera_image()
+
+                # Display the image
+                ax.clear()
+                ax.imshow(camera_image)
+                ax.axis("off")
+                plt.pause(0.01)  # Update the plot
         finally:
+            plt.ioff()  # Turn off interactive mode
+            plt.show()  # Keep the last frame displayed
             p.disconnect()
 
 # Run the simulation
