@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<robot name="hollow_box">
+
+  <!-- Bottom Wall -->
+  <link name="bottom_wall">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.01"/> <!-- Thickness of bottom wall is 0.01 -->
+      </geometry>
+      <origin xyz="0 0 -0.005"/> <!-- Position the bottom wall -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.5 0.01"/>
+      </geometry>
+      <origin xyz="0 0 -0.005"/>
+    </collision>
+  </link>
+
+  <!-- Front Wall -->
+  <link name="front_wall">
+    <visual>
+      <geometry>
+        <box size="0.5 0.01 0.2"/> <!-- Thin wall: 0.01 thick, 0.2 height -->
+      </geometry>
+      <origin xyz="0 0.245 0.1"/> <!-- Positioned along the Y-axis -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.01 0.2"/>
+      </geometry>
+      <origin xyz="0 0.245 0.1"/>
+    </collision>
+  </link>
+
+  <!-- Back Wall -->
+  <link name="back_wall">
+    <visual>
+      <geometry>
+        <box size="0.5 0.01 0.2"/>
+      </geometry>
+      <origin xyz="0 -0.245 0.1"/> <!-- Position back wall along negative Y-axis -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.01 0.2"/>
+      </geometry>
+      <origin xyz="0 -0.245 0.1"/>
+    </collision>
+  </link>
+
+  <!-- Left Wall -->
+  <link name="left_wall">
+    <visual>
+      <geometry>
+        <box size="0.01 0.5 0.2"/> <!-- Thin wall: 0.01 thick, 0.2 height -->
+      </geometry>
+      <origin xyz="0.245 0 0.1"/> <!-- Position along the X-axis -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.01 0.5 0.2"/>
+      </geometry>
+      <origin xyz="0.245 0 0.1"/>
+    </collision>
+  </link>
+
+  <!-- Right Wall -->
+  <link name="right_wall">
+    <visual>
+      <geometry>
+        <box size="0.01 0.5 0.2"/>
+      </geometry>
+      <origin xyz="-0.245 0 0.1"/> <!-- Position along negative X-axis -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.01 0.5 0.2"/>
+      </geometry>
+      <origin xyz="-0.245 0 0.1"/>
+    </collision>
+  </link>
+
+  <!-- Base -->
+  <link name="base">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.01"/> <!-- Thickness of the base is 0.01 -->
+      </geometry>
+      <origin xyz="0 0 -0.01"/> <!-- Position the base below the bottom wall -->
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.5 0.01"/>
+      </geometry>
+      <origin xyz="0 0 -0.01"/>
+    </collision>
+  </link>
+
+  <!-- Fixed Joints -->
+  <joint name="joint_front" type="fixed">
+    <parent link="bottom_wall"/>
+    <child link="front_wall"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <joint name="joint_back" type="fixed">
+    <parent link="bottom_wall"/>
+    <child link="back_wall"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <joint name="joint_left" type="fixed">
+    <parent link="bottom_wall"/>
+    <child link="left_wall"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <joint name="joint_right" type="fixed">
+    <parent link="bottom_wall"/>
+    <child link="right_wall"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <!-- Joint for base -->
+  <joint name="joint_base" type="fixed">
+    <parent link="bottom_wall"/>
+    <child link="base"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  
+</robot>
