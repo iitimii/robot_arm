@@ -25,6 +25,14 @@ p.loadURDF("table/table.urdf", [0, 0, 0], p.getQuaternionFromEuler([0, 0, 0]))
 p.loadURDF(box_urdf_file, [0.4, 0.23, table_top_height + 0.01], p.getQuaternionFromEuler([0, 0, 0]))
 p.loadURDF(box_urdf_file, [-0.4, 0.23, table_top_height + 0.01], p.getQuaternionFromEuler([0, 0, 0]))
 
+# Load 5 objects into a box
+circular_segment = p.loadURDF("models/wooden_blocks/circular_segment.urdf", [0.4, 0.23, table_top_height + 0.1])
+cube = p.loadURDF("models/wooden_blocks/cube.urdf", [0.4, 0.23, table_top_height + 0.1])
+cuboid0 = p.loadURDF("models/wooden_blocks/cuboid0.urdf", [0.4, 0.23, table_top_height + 0.1])
+cuboid1 = p.loadURDF("models/wooden_blocks/cuboid1.urdf", [0.4, 0.23, table_top_height + 0.1])
+cylinder = p.loadURDF("models/wooden_blocks/cylinder.urdf", [0.4, 0.23, table_top_height + 0.1])
+traingle = p.loadURDF("models/wooden_blocks/triangle.urdf", [0.4, 0.23, table_top_height + 0.1])
+
 manipulator_id = p.loadURDF("kuka_iiwa/model.urdf", [0, -0.35, table_top_height], p.getQuaternionFromEuler([0, 0, 0]))
 end_effector_link_index = 6
 
