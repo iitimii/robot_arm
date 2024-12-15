@@ -30,6 +30,7 @@ end_effector_link_index = 6
 
 fov, aspect, near, far = 60, 1.0, 0.02, 5.0
 
+p.setRealTimeSimulation(1)
 try:
     while True:
         p.stepSimulation()
@@ -57,7 +58,7 @@ try:
             projectionMatrix=projection_matrix
         )
 
-        time.sleep(1. / 10000.)
+        time.sleep(1. / 240.)
 
 except KeyboardInterrupt:
     p.disconnect()
