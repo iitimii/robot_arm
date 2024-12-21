@@ -2,6 +2,8 @@ import pybullet as p
 import pybullet_data
 import time
 import numpy as np
+import transforms3d as tf3d
+
 
 def quaternion_to_matrix(quat):
     """Convert a quaternion to a 3x3 rotation matrix."""
@@ -13,10 +15,15 @@ def quaternion_to_matrix(quat):
     ])
 
 box_urdf_file = r"models/box.xml"
+manipulator_file = r"kuka_iiwa/model.urdf"
+# manipulator_file = r"PandaRobot.jl/deps/Panda/panda.urdf"
 
 p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -9.8)
+# p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)  # Optionally disable PyBullet's GUI overlay
+p.configureDebugVisualizer(p.COV_ENABLE_SHADOWS, 1)  # Enable shadows
+p.setRealTimeSimulation(1)  # Enable real-time simulation
 
 p.loadURDF("plane.urdf")
 table_top_height = 0.625
@@ -33,12 +40,11 @@ cuboid1 = p.loadURDF("models/wooden_blocks/cuboid1.urdf", [0.4, 0.23, table_top_
 cylinder = p.loadURDF("models/wooden_blocks/cylinder.urdf", [0.4, 0.23, table_top_height + 0.1])
 traingle = p.loadURDF("models/wooden_blocks/triangle.urdf", [0.4, 0.23, table_top_height + 0.1])
 
-manipulator_id = p.loadURDF("kuka_iiwa/model.urdf", [0, -0.35, table_top_height], p.getQuaternionFromEuler([0, 0, 0]))
+manipulator_id = p.loadURDF(manipulator_file, [0, -0.35, table_top_height], p.getQuaternionFromEuler([0, 0, 0]))
 end_effector_link_index = 6
 
 fov, aspect, near, far = 60, 1.0, 0.02, 5.0
 
-p.setRealTimeSimulation(1)
 try:
     while True:
         p.stepSimulation()
