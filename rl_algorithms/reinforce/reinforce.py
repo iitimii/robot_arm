@@ -1,3 +1,5 @@
+#Reinforce can't work for continuous action space, so we have to adapt it, or... just use PPO :)
+
 import torch
 from torch import nn, optim
 from torch.distributions import Categorical
@@ -12,8 +14,9 @@ class REINFORCE():
             nn.ReLU(),
             nn.Linear(64, 64),
             nn.ReLU(),
-            nn.Linear(64, self.env.action_space.n),
-            nn.Softmax(dim=-1))
+            nn.Linear(64, self.env.action_space.shape[0]),
+            nn.Softmax(dim=-1)
+            )
         else:
             self.policy = policy
 
@@ -33,32 +36,36 @@ class REINFORCE():
             state = self.States[t]
             action = self.Actions[t]
 
-            probs = self.policy(state)
-            dist = Categorical(probs)
-            log_prob = dist.log_prob(action)
+            ## Major adaptation needed here, maths level not sufficient, get cs student
 
-            loss = - log_prob * G
+            # probs = self.policy(state)
+            # dist = Categorical(probs)
+            # log_prob = dist.log_prob(action)
 
-            self.optim.zero_grad()
-            loss.backward()
-            self.optim.step()
+            # loss = - log_prob * G
+
+            # self.optim.zero_grad()
+            # loss.backward()
+            # self.optim.step()
         
 
     def learn(self, total_timesteps=10_000):
         step = 0
         while step < total_timesteps:
-            obs, _ = self.env.reset()
+            obs = self.env.reset()
             obs = torch.tensor(obs, dtype=torch.float32)
             done = False
             self.Actions, self.States, self.Rewards = [], [], []
 
             while not done:
                 probs = self.policy(obs)
-                dist = Categorical(probs)
-                action = dist.sample()
+                # dist = Categorical(probs)
+                # action = dist.sample()
+                action = probs.detach().numpy()
 
-                obs_, reward, terminated, truncated, _ = self.env.step(action.item())
-                done = terminated or truncated
+
+                obs_, reward, done, _ = self.env.step(action)
+                # done = terminated or truncated
 
                 self.Actions.append(action)
                 self.States.append(obs)

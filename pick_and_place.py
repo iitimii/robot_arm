@@ -1,10 +1,11 @@
 import torch
 from simulation.kuka_envs.kukaGymEnv import KukaGymEnv
-from rl_algorithms.REINFORCE import REINFORCE
+from rl_algorithms.ppo.ppo import PPO
+from rl_algorithms.reinforce.reinforce import REINFORCE
 
 env = KukaGymEnv()
 
-model = REINFORCE(env, learning_rate=1e-3)
+model = PPO(env, learning_rate=1e-3)
 model.learn(15_000)
 
 env = env = KukaGymEnv(renders=True)
