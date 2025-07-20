@@ -8,7 +8,7 @@ import numpy as np
 DURATION = 500
 
 
-xml = 'franka_emika_panda/mjx_single_cube.xml'
+xml = './franka_emika_panda/mjx_single_cube.xml'
 rl_model_path = "ppo_reach_model.zip"
 cube_link_name = "box"
 end_effector_link_name = "hand"
